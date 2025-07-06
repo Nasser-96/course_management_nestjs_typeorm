@@ -18,10 +18,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ./src/database/connection-export.ts ",
-    "migration:generate": "npm run typeorm migration:generate -- -n",
-    "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ./src/database/connection-export.ts",
+    "migration:generate": "docker exec -it course_management npm run typeorm migration:generate -- -n Init",
+    "migration:run": "docker exec -it course_management npm run typeorm migration:run",
+    "migration:revert": "docker exec -it course_management npm run typeorm migration:revert",
+    "docker:build": "docker compose -p course -f ./docker-compose.yml up -V --build -d && npm run migration:run && docker logs -f course_management",
+    "docker:down:v": "docker compose -p course -f ./docker-compose.yml down --volumes",
+    "rs": "npm run docker:down:v && npm run docker",
+    "rs:build": "npm run docker:down:v && npm run docker:build",
+    "docker:reset": "npm run docker:down:v && npm run docker:build && npm run migration:generate && npm run migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
