@@ -1,7 +1,7 @@
 version: '1.0'
 
 services:
-  backend:
+  cm-api:
     user: root
     build: .
     container_name: course_management
